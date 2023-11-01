@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+p {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, Helvetica, sans-serif;
+    display: flex;
+}
+.ez {
+    color: yellowgreen;
+}
+.main {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.header {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex: 0.7;
+    padding-right: 17px;
+    align-items: center;
+    justify-content: space-between;
+}
+.header_btnWrapped {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.workArea_wrapper {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    height: 100%;
+}
+.workArea {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex:12;
+    scroll-behavior: auto;  
+    overflow-y: scroll;
+}
+.t1_box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.t1_payload {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    flex-direction: row;
+}
+.t1_input_area {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    border-bottom: 1px solid gainsboro;
+}
+.t1_input_overlay {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.t1_box_header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 3vh;
+    border-bottom: 1px solid #0d6efd;
+}
+.t2_box_header {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid silver;
+}
+.t1_payload_input {
+    padding: 1vw;
+}
+.left_part {
+    display: flex;
+    background-color: white;
+    flex: 1;
+}
+.main {
+    flex: 12;
+}
+.right_part {
+    flex:1;
+    background-color: white;
+}
+.t1_payload_middle {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    margin-left: 20px;
+}
+.t1_fileName {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    /* padding-left: 260px; */
+    margin-bottom: 5px;
+}
+.same_flow_alert {
+    padding-right: 55px;
+    font-weight: 500;
+    color: transparent;
+}
+.t1_number {
+    min-width: 22px;
+    height: 100%;
+    display: flex;
+    font-size: 20px ;
+    align-items: center;
+}
+
+.numbElem {
+    width: fit-content;
+    height: 100%;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    padding-top: 10px;
+    padding-left: 5px;
+}
+
+.blocked {
+    display: none !important;
+}
+
+.window_checkbox {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.form-check_align {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}

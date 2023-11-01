@@ -1,0 +1,82 @@
+.ki_wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding: 20px;
+  /* border-radius: 20px;
+  border: 1px solid silver; */
+}
+.ki_header {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  padding-bottom: 20px;
+}
+
+.ki_header_device_in {
+  display: flex;
+  /* width: 100%; */
+  height: 10px;
+  align-items: center;
+  padding-left: 20px;
+}
+
+.ki_line_input {
+  width: 60px;
+  height: 30px;
+  margin-left: 20px;
+}
+
+.ki_work_area {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  flex:12;
+  scroll-behavior: auto;  
+  overflow-y: scroll;
+}
+
+.ki_payload {
+  width: 100%;
+  height: fit-content;
+  display: flex;
+  flex-direction: row;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid silver;
+}
+
+.ki_temp_number {
+  white-space: nowrap;
+  font-size: 2.5vh;
+}
+
+.ki_input_area {
+  width: 100%;
+  height: fit-content;
+  padding-left: 20px;
+}
+
+.ki_btn_zone {
+  width: 100%;
+  display: flex;
+}
+
+.ki_payload_input {
+  margin-right: 15px;
+}
+
+.ki_accure_temp {
+  padding-left: 15px;
+}
+
+.ki_header_device_transfer_wrapper {
+  width: fit-content;
+  height: fit-content;
+  margin-left: 20px;
+}

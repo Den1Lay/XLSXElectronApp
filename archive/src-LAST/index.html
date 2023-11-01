@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Калькулятор времени</title>
+    <link rel="stylesheet" type="text/css" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/main_menu.css">
+    <link rel="stylesheet" href="styles/device_menu.css">
+    <link rel="stylesheet" href="styles/koefTK_input.css">
+    <link rel="stylesheet" href="styles/result_menu.css">
+    
+  </head>
+</html>
+<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.js" integrity="sha512-6LKCH7i2+zMNczKuCT9ciXgFCKFp3MevWTZUXDlk7azIYZ2wF5LRsrwZqO7Flt00enUI+HwzzT5uhOvy6MNPiA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  -->
+<!-- https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.js -->
+<!-- https://cdn.jsdelivr.net/npm/chart.js -->
+
+<!-- <script src="https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"></script> -->
+<script src='../node_modules/xlsx/xlsx.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" integrity="sha512-7U4rRB8aGAHGVad3u2jiC7GA5/1YhQcQjxKeaVms/bT66i3LVBMRcBI9KwABNWnxOSwulkuSXxZLGuyfvo7V1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+
+<body>
+  <div class="left_part"></div>
+  <!-- <div>
+    <canvas width="500" height="300" id="myChart"></canvas>
+  </div> -->
+  <section id="main_menu" class="main ">
+    <div class="mm_wrapper">
+      <div class="mm_input">
+
+        <div class="mm_input_line ">
+          <div class="mm_input_line_text">
+            Кол-во приборов:
+          </div>
+          <input value="2" type="number" min="1" class="mm_input_line_input form-control input-sm" id="mm_device_input">
+        </div>
+
+        <div class="mm_input_line ">
+          <div class="mm_input_line_text">
+            Кол-во температур:
+          </div>
+          <input value="7" type="number" min="1" class="mm_input_line_input form-control input-sm" id="mm_temp_input">
+        </div>
+
+        <div class="mm_input_line ">
+          <div class="mm_input_line_text">
+            Кол-во расходов:
+          </div>
+          <input value="3" type="number" min="1" class="mm_input_line_input form-control input-sm" id="mm_flows_input">
+        </div>
+
+      </div>
+
+      <div class="mm_results">
+        <button type="button" id="mm_reset_btn" class="btn btn-outline-primary btn-sm">
+          Обнулить данные
+        </button>
+        <button disabled type="button" class="btn btn-primary btn-sm" id="main_res">
+          Итоги
+        </button>
+      </div>
+
+      <div class="mm_results">
+        <div class="mm_state_control_get_btn">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="mm_get_state_btn">
+            Скачать состояние
+          </button>
+        </div>
+        <div>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="document.getElementById('mm_down_state').click()">Загрузить состояние</button>
+          <input type="file" id="mm_down_state" style="display:none;"/>
+        </div>
+      </div>
+
+      <div class="mm_devices">
+        <div class="mm_devices_header">
+          Приборы:
+        </div>
+        <div class="mm_devices_container" id="mm_devices_container">
+           Нет приборов
+        </div>
+      </div>
+      
+    </div>
+  </section>
+
+  <section id="device_menu" class="main blocked">
+    <div class="dm_wrapper">
+      <div class="dm_header">
+        <button type="button" class="btn btn-primary btn-sm" id="dm_main_menu_btn">
+          Главное меню
+        </button>
+        <div id="dm_device_ind"></div>
+        <button disabled type="button" class="btn btn-primary btn-sm" id="dm_main_local_result">
+          Локальные итоги
+        </button>
+        
+      </div>
+
+      <canvas width="598px" height="298px" class="canvas_el" id="temp-time_chart"></canvas>
+
+      <div class="dm_header">
+        <button type="button" class="btn btn-primary btn-sm" id="dm_temp-time_btn">
+          Изменить данные temp-time
+        </button>
+        <button 
+          data-bs-toggle="tooltip" data-bs-placement="top"
+          data-bs-custom-class="custom-tooltip"
+          data-bs-title="Если введены данные для коэффициентов ТК,
+          то будет использоваться температура из них"  
+          type="button" class="btn btn-outline-secondary btn-sm" id="dm_temp-time_down">
+          Скачать данные
+        </button>
+      </div>
+
+      <canvas  id="koef-TK_chart"></canvas>
+
+      <div class="dm_header">
+        <button type="button" class="btn btn-primary btn-sm" id="dm_koef-TK_btn">
+          Изменить данные koef Tk
+        </button>
+        <button type="button" class="btn btn-outline-secondary btn-sm" id="dm_koef-TK_down">
+          Скачать данные
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="temp-time_input" class="main blocked">
+    
+    <div class="workArea_wrapper">
+      <div class="header">
+        <button type="button" class="btn btn-primary btn-sm" id="tt_device_menu_btn">
+          Меню прибора
+        </button>
+        <ul class="nav nav-tabs" id="tt_header_temp_nav">
+          <!-- <li class="nav-item">
+            <a class="nav-link active" href="#" id="a_20">20°C</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="a_30">30°C</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="a_40">40°C</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="a_50">50°C</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="a_60">60°C</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="a_70">70°C</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="a_80">80°C</a>
+          </li> -->
+        </ul>
+        <div class="header_btnWrapped">
+          <button type="button" disabled class="btn btn-outline-primary btn-sm" id="arc_down_btn">Скачать архив</button>
+          <div class="dropdown">
+            <a class="btn btn-link" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="window_checkbox">
+                <div class="form-check form-check_align">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
+                  <label class="form-check-label" for="flexCheckDefault">
+                    <p style="white-space: nowrap;padding-left: 10px;">Сортировка по расходу</p>
+                  </label>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="workArea" id="t1_box_workArea">
+        <!-- <div class="t1_box" id="t2_box_id"></div>
+        <div class="t1_box" id="t3_box_id"></div>
+        <div class="t1_box" id="t4_box_id"></div>
+        <div class="t1_box" id="t5_box_id"></div>
+        <div class="t1_box" id="t6_box_id"></div>
+        <div class="t1_box" id="t7_box_id"></div>
+        <div class="t1_box" id="t8_box_id"></div> -->
+      </div>
+      </div>
+
+  </section>
+  
+  <section id="koef-TK_input" class="main blocked">
+    <div class="ki_wrapper">
+      <div class="ki_header">
+        <button type="button" class="btn btn-primary btn-sm" id="ki_device_menu_btn">
+          Меню прибора
+        </button>
+        <div class="ki_header_device_in">
+          <div>
+            Номер прибора в протоколе:
+          </div>
+          <input value="4" type="number" min="1" class="ki_line_input form-control input-sm" id="ki_device_input">
+        </div>
+        <div 
+          data-bs-toggle="tooltip" data-bs-placement="top"
+          data-bs-custom-class="custom-tooltip"
+          data-bs-title="Перед переносом данных необходимо изменить номер прибора в протоколе"  
+          class="ki_header_device_transfer_wrapper">
+          <button id="ki_device_transfer_btn" 
+            type="button" class="btn btn-outline-primary btn-sm ">
+            ? Перенос
+            </button>
+        </div>
+        <input 
+          data-bs-toggle="tooltip" data-bs-placement="top"
+          data-bs-custom-class="custom-tooltip"
+          data-bs-title="Номер прибора из которого будет происходить копирование данных"  
+          value="1" type="number" min="1" class="ki_line_input form-control input-sm" id="ki_device_transfer_index">
+      </div>
+
+      <div class="ki_work_area" id="ki_box_workArea">
+        
+      </div>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      
+      <div id="liveToast"  class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            Неверный номер прибора.
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+        </div>
+      </div>
+
+      <div id="ki_dev_id_toast"  class="toast align-items-center text-bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            Неверный номер прибора в протоколе.
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+        </div>
+      </div>
+
+      <div id="ki_dev_id_grad"  class="toast align-items-center text-bg-warning border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            Передан не файл градуировки.
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+        </div>
+      </div>
+      
+      <!-- <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img src="..." class="rounded me-2" alt="...">
+          <strong class="me-auto">Bootstrap</strong>
+          <small>11 мин назад</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+        </div>
+        <div class="toast-body">
+          Привет, мир! Это тост-сообщение.
+        </div>
+      </div> -->
+
+    </div>
+
+  </section>
+
+  <section id="result_menu" class="main blocked">
+    <div class="rm_wrapper">
+
+      <div class="rm_header">
+        <button type="button" class="rm_absolute_mm_btn btn btn-primary btn-sm" id="rm_main_menu_btn">
+          Главное меню
+        </button>
+        <div class="rm_title_hat"> Меню итогов</div>
+      </div>
+
+      <canvas  class="" id="result_menu_chart"></canvas>
+
+      <div class="rm_btn_wrapper">
+        <button type="button" class="btn btn-primary btn-sm" id="rm_main_menu_btn">
+          Общий
+        </button>
+      </div>
+    </div>
+  </section>
+  <div class="right_part"></div>
+</body>
+
+<!-- <script src='js/temp-time_input.js'></script> -->
+<script src='js/main-menu.js'></script>
+<script src='js/device-menu.js'></script>
+<script src='js/temp-time.js'></script>
+<script src='js/koef-TK.js'></script>
+<script src="js/result-menu.js"></script>
